@@ -2,7 +2,6 @@ bottle
 six
 redis
 hiredis
-PyJWT
 pytest
 coverage
 coveralls
