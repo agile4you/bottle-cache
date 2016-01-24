@@ -12,6 +12,7 @@ __date__ = '23-1-2016'
 
 import bottle
 import collections
+import inspect
 import ujson
 
 
@@ -35,12 +36,13 @@ def available_backend():
             for callback in available_list}
 
 
-def cache_for(ttl, cache_key_func, content_type='application/json'):
+def cache_for(ttl, cache_key_func='full_path', content_type='application/json'):
     """A decorator that signs a callable object with a 'CacheInfo'
     attribute.
 
     Args:
         ttl (int): Cache Time to live in seconds.
+        cache_key_func (str): The key for the cache key function installed on Plugin.
         content_type (str): Handler response type.
     Returns:
         The callable object.
@@ -98,24 +100,6 @@ class CachePlugin(object):
         self.cache_key_rules[rule_key] = rule_callback
         return self
 
-    def __repr__(self):
-        return "<{} instance at: 0x{:x}>".format(self.__class__, id(self))
-
-    def __str__(self):
-        return '<{} instance> {}'.format(
-            self.__class__.__name__,
-            self.keyword
-        )
-
-    def __contains__(self, item):
-        return item in self.cache_key_rules
-
-    def __getitem__(self, item):
-        return self.cache_key_rules.get(item, None)
-
-    def __delitem__(self, key):
-        del self.cache_key_rules[key]
-
     def setup(self, app):  # pragma: no cover
         """Make sure that other installed plugins don't affect the same
         keyword argument and check if metadata is available.
@@ -136,7 +120,16 @@ class CachePlugin(object):
         cache_enabled = getattr(callback, 'cache_info', None)
 
         if not cache_enabled:
-            return callback
+            callback_args = inspect.getargspec(context.callback).args
+
+            if self.keyword not in callback_args:
+                return callback
+
+            def _wrapped_injected(*args, **kwargs):
+                kwargs[self.keyword] = self.backend
+                return callback(*args, **kwargs)
+
+            return _wrapped_injected
 
         if cache_enabled.cache_key_func not in self:
             raise bottle.PluginError(
@@ -160,3 +153,28 @@ class CachePlugin(object):
             return result
 
         return wrapper
+
+    def __repr__(self):
+        return "<{} instance at: 0x{:x}>".format(self.__class__, id(self))
+
+    def __str__(self):
+        return '<{} instance> {}'.format(
+            self.__class__.__name__,
+            self.keyword
+        )
+
+    def __iter__(self):
+        for key in self.cache_key_rules:
+            yield key
+
+    def __contains__(self, item):
+        return item in self.cache_key_rules
+
+    def __getitem__(self, item):
+        return self.cache_key_rules.get(item, None)
+
+    def __setitem__(self, key, value):
+        self.cache_key_rules[key] = value
+
+    def __delitem__(self, key):
+        del self.cache_key_rules[key]
