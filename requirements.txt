@@ -1,6 +1,7 @@
 bottle
 six
 redis
+ujson
 hiredis
 pytest
 coverage
