@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='bottle-cache',
-    version='1.1',
+    version='1.1a',
     packages=['test', 'bottle_cache'],
     url='https://github.com/agile4you/bottle-cache',
     license='GLPv3',
