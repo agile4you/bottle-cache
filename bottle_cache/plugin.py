@@ -19,7 +19,7 @@ import ujson
 CacheInfo = collections.namedtuple('CacheInfo', 'ttl, cache_key_func, content_type')
 
 
-def available_backend():
+def available_backend():  # pragma: no cover
     """Auto loading available cache backend implementation
     without hard-coding them.
     """
@@ -84,7 +84,7 @@ class CachePlugin(object):
         'query_path': lambda req, cxt: req.query_string,
     }
 
-    def __init__(self, keyword, backend, **backend_kwargs):
+    def __init__(self, keyword, backend, **backend_kwargs):  # pragma: no cover
 
         if backend not in available_backend():
             raise bottle.PluginError(
@@ -96,7 +96,7 @@ class CachePlugin(object):
         self.backend = available_backend()[backend](**backend_kwargs)
         self.keyword = keyword
 
-    def register_rule(self, rule_key, rule_callback):
+    def register_rule(self, rule_key, rule_callback):  # pragma: no cover
         self.cache_key_rules[rule_key] = rule_callback
         return self
 
@@ -154,27 +154,27 @@ class CachePlugin(object):
 
         return wrapper
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         return "<{} instance at: 0x{:x}>".format(self.__class__, id(self))
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return '<{} instance> {}'.format(
             self.__class__.__name__,
             self.keyword
         )
 
-    def __iter__(self):
+    def __iter__(self):  # pragma: no cover
         for key in self.cache_key_rules:
             yield key
 
-    def __contains__(self, item):
+    def __contains__(self, item):  # pragma: no cover
         return item in self.cache_key_rules
 
-    def __getitem__(self, item):
+    def __getitem__(self, item):  # pragma: no cover
         return self.cache_key_rules.get(item, None)
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key, value):  # pragma: no cover
         self.cache_key_rules[key] = value
 
-    def __delitem__(self, key):
+    def __delitem__(self, key):  # pragma: no cover
         del self.cache_key_rules[key]

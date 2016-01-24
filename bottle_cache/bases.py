@@ -49,7 +49,7 @@ class BaseCacheBackend(object):
         """Set a value in cache under a specific key, with time to live
 
         Args:
-            key (str): The key string value.
+            key (str): The cache key string.
             value (dict): The dict value.
             ttl (int): The time to live. If none key never expires.
 
@@ -58,5 +58,24 @@ class BaseCacheBackend(object):
         """
         pass
 
-    def key_func(self, key):
+    @abc.abstractmethod
+    def remove(self, key):
+        """Remove a key/value from cache.
+
+        Args:
+            key (str): The cache key.
+
+        Returns:
+            Cache instance.
+        """
+
+    @abc.abstractmethod
+    def clear(self):
+        """Removes all key/ values from cache storage.
+
+        Returns:
+            Cache instance.
+        """
+
+    def key_func(self, key):  # pragma: no cover
         return self.key_tpl.format(key)

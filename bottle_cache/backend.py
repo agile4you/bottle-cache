@@ -32,7 +32,7 @@ class RedisCacheBackend(BaseCacheBackend):
         """
         try:
             return self.backend.get(key)
-        except RedisError as error:
+        except RedisError as error:  # pragma: no cover
             raise CacheError(error.args)
 
     def set(self, key, value, ttl=None):
@@ -42,9 +42,23 @@ class RedisCacheBackend(BaseCacheBackend):
             if ttl:
                 self.backend.setex(key, ttl, value)
             else:
-                self.set(key, value)
+                self.backend.set(key, value)
 
             return self
 
-        except RedisError as error:
+        except RedisError as error:  # pragma: no cover
             raise CacheError(error.args)
+
+    def remove(self, key):
+        """Implementing `BaseCache.remove` method.
+        """
+        try:
+            self.backend.delete(key)
+            return self
+
+        except RedisError as error:  # pragma: no cover
+            raise CacheError(error.args)
+
+    def clear(self):
+        self.backend.flushall()
+        return self
