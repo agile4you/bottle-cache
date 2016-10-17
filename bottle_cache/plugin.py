@@ -10,6 +10,7 @@ __date__ = '23-1-2016'
 
 
 import bottle
+import bottle_cache.backend
 import collections
 import inspect
 import ujson
@@ -23,7 +24,7 @@ def available_backend():  # pragma: no cover
     without hard-coding them.
     """
 
-    import bottle_cache.backend as backend_module
+    backend_module = bottle_cache.backend
 
     available_list = [
         callback for callback in dir(backend_module)
