@@ -22,7 +22,7 @@ Cache plugin for bottle.py apps.
 __author__ = 'Papavassiliou Vassilis'
 __date__ = '2015-12-10'
 __version__ = '0.0.1'
-__all__ = ['plugin']
+__all__ = ['CachePlugin', 'cache_for']
 
 
-import bottle_cache.plugin
+from bottle_cache.plugin import CachePlugin, cache_for
