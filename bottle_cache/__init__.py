@@ -25,4 +25,4 @@ __version__ = '0.0.1'
 __all__ = ['plugin']
 
 
-from bottle_cache import plugin
+import bottle_cache.plugin
