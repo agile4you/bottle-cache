@@ -22,4 +22,8 @@ Cache plugin for bottle.py apps.
 __author__ = 'Papavassiliou Vassilis'
 __date__ = '2015-12-10'
 __version__ = '0.0.1'
-__all__ = []
+__all__ = ['backend', 'plugin']
+
+
+from bottle_cache import backend
+from bottle_cache import plugin

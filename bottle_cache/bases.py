@@ -4,7 +4,6 @@
 Provides the main package interfaces for caching.
 """
 
-from __future__ import absolute_import
 
 __author__ = 'Papavassiliou Vassilis'
 __date__ = '23-1-2016'
