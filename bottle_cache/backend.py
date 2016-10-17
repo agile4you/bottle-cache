@@ -4,8 +4,6 @@
 Provides package caching backend implementations.
 """
 
-from __future__ import absolute_import
-
 __author__ = 'Papavassiliou Vassilis'
 __date__ = '23-1-2016'
 

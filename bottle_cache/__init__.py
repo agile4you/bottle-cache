@@ -25,5 +25,5 @@ __version__ = '0.0.1'
 __all__ = ['backend', 'plugin']
 
 
-from bottle_cache import backend
+import bottle_cache.backend
 from bottle_cache import plugin
